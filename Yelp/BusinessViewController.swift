@@ -47,6 +47,11 @@ class BusinessViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if indexPath.row == 0 {
+            var featuredCell = tableView.dequeueReusableCellWithIdentifier("FeaturedBusinessCell") as FeaturedBusinessCell
+            return featuredCell
+        }
+        
         var cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell") as BusinessCell
         return cell
     }
