@@ -21,6 +21,8 @@ class BusinessViewController: UIViewController,
     let yelpToken = "uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV"
     let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
     
+    var businesses: [Business] = []
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -36,29 +38,32 @@ class BusinessViewController: UIViewController,
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         
         client.searchWithTerm("Thai", success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-            println(response)
+            let businesses = response["businesses"]! as [NSDictionary]
+            for business in businesses {
+                self.businesses.append(Business(business: business as NSDictionary))
+            }
+            
+            self.businessTableView.reloadData()
+            
             }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                 println(error)
         }
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return businesses.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            var featuredCell = tableView.dequeueReusableCellWithIdentifier("FeaturedBusinessCell") as FeaturedBusinessCell
-            return featuredCell
-        }
-        
-        var cell = tableView.dequeueReusableCellWithIdentifier("BusinessCell") as BusinessCell
-        return cell
+//        var id = indexPath.row == 0 ? "FeaturedBusinessCell" : "BusinessCell"
+        var id = "BusinessCell"
+        var cell = tableView.dequeueReusableCellWithIdentifier(id) as BusinessCell?
+        cell?.business = businesses[indexPath.row]
+        return cell!
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     /*

@@ -10,15 +10,29 @@ import UIKit
 
 class BusinessCell: UITableViewCell {
 
+    @IBOutlet weak var businessIcon: UIImageView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var distanceLabel: UILabel!
+    @IBOutlet weak var reviewsLabel: UILabel!
+    @IBOutlet weak var ratingImageView: UIImageView!
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
+    
+    var business: Business? {
+        didSet {
+            nameLabel.text = business!.getName()
+            reviewsLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
+            categoryLabel.text = business!.getCategories()
+            addressLabel.text = business!.getLocation()
+            distanceLabel.text = NSString(format: "%d mi", business!.getDistance())
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
-
 }
