@@ -1,40 +1,45 @@
 //
-//  BusinessCell.swift
+//  FeaturedBusinessCell.swift
 //  Yelp
 //
-//  Created by Hao Sun on 2/10/15.
+//  Created by Hao Sun on 2/12/15.
 //  Copyright (c) 2015 Timothy Lee. All rights reserved.
 //
 
 import UIKit
 
-class BusinessCell: UITableViewCell {
+class FeaturedBusinessCell: UITableViewCell {
 
-    @IBOutlet weak var businessIcon: UIImageView!
+    @IBOutlet weak var featuredImageView: UIImageView!
+    @IBOutlet weak var snippetImageView: UIImageView!
+    @IBOutlet weak var snippetLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var reviewsLabel: UILabel!
     @IBOutlet weak var ratingImageView: UIImageView!
-    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var reviewLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     
     var business: Business? {
         didSet {
             nameLabel.text = business!.getName()
-            reviewsLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
+            reviewLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
             categoryLabel.text = business!.getCategories()
-            addressLabel.text = business!.getLocation()
             distanceLabel.text = NSString(format: "%d mi", business!.getDistance())
-            businessIcon.setImageWithURL(business!.getImageUrl())
+            featuredImageView.setImageWithURL(business!.getImageUrl())
             ratingImageView.setImageWithURL(business!.getRatingImageUrl())
+            snippetImageView.setImageWithURL(business!.getSnippetImageUrl())
+            snippetLabel.text = business!.getSnippetText()
         }
     }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
+        // Initialization code
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
     }
+
 }

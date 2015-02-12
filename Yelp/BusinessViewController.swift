@@ -30,6 +30,8 @@ class BusinessViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "rotated", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        
         businessTableView.delegate = self
         businessTableView.dataSource = self
         businessTableView.rowHeight = UITableViewAutomaticDimension
@@ -55,15 +57,30 @@ class BusinessViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        var id = indexPath.row == 0 ? "FeaturedBusinessCell" : "BusinessCell"
-        var id = "BusinessCell"
-        var cell = tableView.dequeueReusableCellWithIdentifier(id) as BusinessCell?
-        cell?.business = businesses[indexPath.row]
-        return cell!
+        if indexPath.row > -1 {
+            let id = "FeaturedBusinessCell"
+            var cell = tableView.dequeueReusableCellWithIdentifier(id) as FeaturedBusinessCell
+            cell.business = businesses[indexPath.row]
+            return cell
+        } else {
+            let id = "BusinessCell"
+            var cell = tableView.dequeueReusableCellWithIdentifier(id) as BusinessCell
+            cell.business = businesses[indexPath.row]
+            return cell
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func rotated() {
+        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)) {
+        }
+        
+        if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
+        }
+        businessTableView.reloadData()
     }
     
     /*

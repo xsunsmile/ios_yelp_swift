@@ -26,20 +26,24 @@ class Business: NSObject, Printable, DebugPrintable {
         return getBusinessDetail("name") as NSString
     }
     
-    func getRatingImageUrl() -> NSString {
-        return getBusinessDetail("rating_img_url") as NSString
+    func getRatingImageUrl() -> NSURL {
+        return NSURL(string: getBusinessDetail("rating_img_url") as String)!
     }
     
     func getReviewCount() -> NSInteger {
         return getBusinessDetail("review_count") as NSInteger
     }
     
-    func getSnippetImageUrl() -> NSString {
-        return getBusinessDetail("snippet_image_url") as NSString
+    func getSnippetImageUrl() -> NSURL {
+        return NSURL(string: getBusinessDetail("snippet_image_url") as String)!
+    }
+    
+    func getImageUrl() -> NSURL {
+        return NSURL(string: getBusinessDetail("image_url") as String)!
     }
     
     func getSnippetText() -> NSString {
-        return getBusinessDetail("snippet_test") as NSString
+        return getBusinessDetail("snippet_text") as NSString
     }
     
     func getCategories() -> NSString {
