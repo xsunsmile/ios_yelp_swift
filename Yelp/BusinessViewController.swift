@@ -22,6 +22,7 @@ class BusinessViewController: UIViewController,
     let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
     
     var businesses: [Business] = []
+    var screenDirection = "portrait"
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -35,6 +36,7 @@ class BusinessViewController: UIViewController,
         businessTableView.delegate = self
         businessTableView.dataSource = self
         businessTableView.rowHeight = UITableViewAutomaticDimension
+        businessTableView.estimatedRowHeight = 90
         
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
@@ -57,7 +59,7 @@ class BusinessViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row > -1 {
+        if screenDirection == "landscape" {
             let id = "FeaturedBusinessCell"
             var cell = tableView.dequeueReusableCellWithIdentifier(id) as FeaturedBusinessCell
             cell.business = businesses[indexPath.row]
@@ -76,10 +78,13 @@ class BusinessViewController: UIViewController,
     
     func rotated() {
         if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)) {
+            screenDirection = "landscape"
         }
         
         if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
+            screenDirection = "portrait"
         }
+
         businessTableView.reloadData()
     }
     

@@ -31,7 +31,7 @@
                                                     <rect key="frame" x="8" y="8" width="80" height="80"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" priority="750" constant="80" id="3Yf-bT-fbM"/>
-                                                        <constraint firstAttribute="width" priority="750" constant="80" id="DYv-iy-zV2"/>
+                                                        <constraint firstAttribute="width" constant="80" id="DYv-iy-zV2"/>
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Business One Name" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lTx-1j-T0a">
