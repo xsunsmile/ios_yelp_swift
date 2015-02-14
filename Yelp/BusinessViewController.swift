@@ -10,9 +10,11 @@ import UIKit
 
 class BusinessViewController: UIViewController,
                               UITableViewDelegate,
-                              UITableViewDataSource
+                              UITableViewDataSource,
+                              UISearchBarDelegate
 {
     var client: YelpClient!
+    
     @IBOutlet weak var businessTableView: UITableView!
     
     // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
@@ -23,6 +25,7 @@ class BusinessViewController: UIViewController,
     
     var businesses: [Business] = []
     var screenDirection = "portrait"
+    var searchTerm = "Thai"
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -33,6 +36,10 @@ class BusinessViewController: UIViewController,
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "rotated", name: UIDeviceOrientationDidChangeNotification, object: nil)
         
+        var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, 40))
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+        
         businessTableView.delegate = self
         businessTableView.dataSource = self
         businessTableView.rowHeight = UITableViewAutomaticDimension
@@ -41,7 +48,16 @@ class BusinessViewController: UIViewController,
         // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
         
-        client.searchWithTerm("Thai", success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+        SVProgressHUD.show()
+        doSearch(searchTerm)
+        SVProgressHUD.dismiss()
+    }
+    
+    func doSearch(term: NSString) {
+        businesses.removeAll(keepCapacity: true)
+        
+        client.searchWithTerm(term, success: {
+            (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
             let businesses = response["businesses"]! as [NSDictionary]
             for business in businesses {
                 self.businesses.append(Business(business: business as NSDictionary))
@@ -84,17 +100,33 @@ class BusinessViewController: UIViewController,
         if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
             screenDirection = "portrait"
         }
-
-//        businessTableView.reloadData()
+    }
+    
+    func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            return
+        } else {
+            searchTerm = searchText
+            println(searchTerm)
+        }
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        println("search \(searchTerm)")
+        if !searchTerm.isEmpty {
+            searchBar.endEditing(true)
+            searchBar.text = ""
+            doSearch(searchTerm)
+        }
     }
     
     /*
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    // Get the new view controller using segue.destinationViewController.
+    // Pass the selected object to the new view controller.
     }
     */
 }
