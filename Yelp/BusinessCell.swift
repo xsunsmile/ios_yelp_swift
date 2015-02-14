@@ -20,20 +20,29 @@ class BusinessCell: UITableViewCell {
     
     var business: Business? {
         didSet {
-            nameLabel.text = business!.getName()
-            reviewsLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
-            categoryLabel.text = business!.getCategories()
-            addressLabel.text = business!.getLocation()
-            distanceLabel.text = NSString(format: "%d mi", business!.getDistance())
-            businessIcon.setImageWithURL(business!.getImageUrl())
-            ratingImageView.setImageWithURL(business!.getRatingImageUrl())
+            refreshView()
         }
+    }
+    
+    func refreshView() {
+        nameLabel.text = business!.getName()
+        reviewsLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
+        categoryLabel.text = business!.getCategories()
+        addressLabel.text = business!.getLocation()
+        distanceLabel.text = NSString(format: "%d mi", business!.getDistance())
+        businessIcon.setImageWithURL(business!.getImageUrl())
+        ratingImageView.setImageWithURL(business!.getRatingImageUrl())
+    }
+    
+    override func layoutSubviews() {
+        refreshView()
+        super.layoutSubviews()
     }
     
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }

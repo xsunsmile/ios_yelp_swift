@@ -59,7 +59,7 @@ class BusinessViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if screenDirection == "landscape" {
+        if indexPath.row > -1 {
             let id = "FeaturedBusinessCell"
             var cell = tableView.dequeueReusableCellWithIdentifier(id) as FeaturedBusinessCell
             cell.business = businesses[indexPath.row]
@@ -85,7 +85,7 @@ class BusinessViewController: UIViewController,
             screenDirection = "portrait"
         }
 
-        businessTableView.reloadData()
+//        businessTableView.reloadData()
     }
     
     /*
