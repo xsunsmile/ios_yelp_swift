@@ -38,6 +38,10 @@ class BusinessViewController: UIViewController,
         
         var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, 40))
         searchBar.delegate = self
+        navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        navigationController?.navigationBar.barTintColor = UIColor.redColor()
+        navigationController?.navigationBar.barStyle = UIBarStyle.Black
+        
         navigationItem.titleView = searchBar
         
         businessTableView.delegate = self

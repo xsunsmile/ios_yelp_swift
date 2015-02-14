@@ -24,7 +24,7 @@ class FeaturedBusinessCell: UITableViewCell {
             nameLabel.text = business!.getName()
             reviewLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
             categoryLabel.text = business!.getCategories()
-            distanceLabel.text = NSString(format: "%d mi", business!.getDistance())
+            distanceLabel.text = NSString(format: "%.1f mi", business!.getDistance())
             featuredImageView.setImageWithURL(business!.getImageUrl())
             ratingImageView.setImageWithURL(business!.getRatingImageUrl())
             snippetImageView.setImageWithURL(business!.getSnippetImageUrl())
