@@ -44,7 +44,7 @@ class Business: NSObject, Printable, DebugPrintable {
     
     func getLargeUrl() -> NSURL? {
         if let s = getBusinessDetail("image_url") as? String {
-            return NSURL(string: s.stringByReplacingOccurrencesOfString("/ms.", withString: "/o."))
+            return NSURL(string: s.stringByReplacingOccurrencesOfString("/ms.", withString: "/l."))
         }
         
         return nil
