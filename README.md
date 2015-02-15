@@ -18,6 +18,7 @@ Hours to finish requirements: 14 hours
 - [ ] Categories should show a subset of the full list with a "See All" row to expand
 
 ### Walk Throughs
+
 - Map view
 ![mapView](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/mapView.gif)
 - Original layout
