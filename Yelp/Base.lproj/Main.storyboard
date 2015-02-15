@@ -200,11 +200,12 @@
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="d4a-Ab-SF8" firstAttribute="leading" secondItem="bCC-c8-uKa" secondAttribute="trailing" constant="8" id="4ZU-Wo-Hgn"/>
+                                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="d4a-Ab-SF8" secondAttribute="bottom" constant="8" id="RSR-fQ-Umf"/>
                                                         <constraint firstItem="d4a-Ab-SF8" firstAttribute="top" secondItem="c5Z-lW-pWF" secondAttribute="top" constant="8" id="WRD-hP-z4a"/>
                                                         <constraint firstItem="bCC-c8-uKa" firstAttribute="top" secondItem="c5Z-lW-pWF" secondAttribute="top" constant="8" id="f92-9H-6Vy"/>
                                                         <constraint firstAttribute="trailing" secondItem="d4a-Ab-SF8" secondAttribute="trailing" constant="8" id="nkM-8E-kAB"/>
                                                         <constraint firstItem="bCC-c8-uKa" firstAttribute="leading" secondItem="c5Z-lW-pWF" secondAttribute="leading" constant="8" id="pD1-7e-4y5"/>
-                                                        <constraint firstAttribute="bottom" secondItem="bCC-c8-uKa" secondAttribute="bottom" constant="8" id="rib-hF-KgH"/>
+                                                        <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="bCC-c8-uKa" secondAttribute="bottom" constant="8" id="rib-hF-KgH"/>
                                                     </constraints>
                                                 </view>
                                                 <view alpha="0.84999999999999987" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EgR-L9-t4O">

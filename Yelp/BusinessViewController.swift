@@ -123,6 +123,7 @@ class BusinessViewController: UIViewController,
             searchParams?.removeObjectForKey("sort")
             searchParams?.removeObjectForKey("radius_filter")
             searchParams?.removeObjectForKey("deals_filter")
+            searchParams?.removeObjectForKey("category_filter")
             searchParams?["term"] = searchTerm
             doSearch()
         }
