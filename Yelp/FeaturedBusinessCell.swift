@@ -18,6 +18,7 @@ class FeaturedBusinessCell: UITableViewCell {
     @IBOutlet weak var ratingImageView: UIImageView!
     @IBOutlet weak var reviewLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
     
     var business: Business? {
         didSet {
@@ -25,10 +26,11 @@ class FeaturedBusinessCell: UITableViewCell {
             reviewLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
             categoryLabel.text = business!.getCategories()
             distanceLabel.text = NSString(format: "%.1f mi", business!.getDistance())
-            featuredImageView.setImageWithURL(business!.getImageUrl())
+            featuredImageView.setImageWithURL(business!.getLargeUrl())
             ratingImageView.setImageWithURL(business!.getRatingImageUrl())
             snippetImageView.setImageWithURL(business!.getSnippetImageUrl())
             snippetLabel.text = business!.getSnippetText()
+            addressLabel.text = business!.getLocation()
         }
     }
     override func awakeFromNib() {

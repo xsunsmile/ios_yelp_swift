@@ -36,14 +36,13 @@ class BusinessViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         searchParams = [
             "term": searchTerm,
             "location": currentLocation,
             "cll": "37.782193,-122.410254",
         ]
-        
-        var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, 40))
+        var searchBarHeight = navigationController?.navigationBar.frame.height
+        var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, searchBarHeight! * 0.6))
         searchBar.delegate = self
         navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         navigationController?.navigationBar.barTintColor = UIColor.redColor()
@@ -61,10 +60,9 @@ class BusinessViewController: UIViewController,
     }
     
     func doSearch() {
-        activityView.hidden = false
-        businessTableView.hidden = true
-        
         businesses.removeAll(keepCapacity: true)
+        SVProgressHUD.show()
+        
         if let sParams = searchParams {
             client.searchWithParams(sParams, success: {
                 (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
@@ -80,14 +78,13 @@ class BusinessViewController: UIViewController,
                 }
                 
                 self.businessTableView.reloadData()
+                SVProgressHUD.dismiss()
                 
                 }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                     println(error)
+                    SVProgressHUD.dismiss()
             }
         }
-        
-        activityView.hidden = true
-        businessTableView.hidden = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -143,8 +140,11 @@ class BusinessViewController: UIViewController,
         searchParams?["sort"] = sortBy
     }
     
+    func categoryFilterChanged(category: NSString) {
+        searchParams?["category_filter"] = category
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        println(segue.identifier)
         if segue.identifier == "FilterViewController" {
             let vc = segue.destinationViewController as FilterViewController
             vc.delegate = self

@@ -42,6 +42,14 @@ class Business: NSObject, Printable, DebugPrintable {
         return NSURL(string: getBusinessDetail("image_url") as String)!
     }
     
+    func getLargeUrl() -> NSURL? {
+        if let s = getBusinessDetail("image_url") as? String {
+            return NSURL(string: s.stringByReplacingOccurrencesOfString("/ms.", withString: "/o."))
+        }
+        
+        return nil
+    }
+    
     func getSnippetText() -> NSString {
         return getBusinessDetail("snippet_text") as NSString
     }
@@ -51,10 +59,8 @@ class Business: NSObject, Printable, DebugPrintable {
         
         if let categories = getBusinessDetail("categories") as? [[NSString]] {
             for cate1 in categories {
-                for cate2 in cate1 {
-                   cate.appendString(cate2)
-                   cate.appendString(" ")
-                }
+                cate.appendString(cate1[0])
+                cate.appendString(" ")
             }
         }
         
