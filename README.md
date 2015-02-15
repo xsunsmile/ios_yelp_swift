@@ -13,10 +13,11 @@ Hours to finish requirements: 14 hours
 
 ### Optionals
 - [ ] infinite scroll for restaurant results
-- [ ] Implement map view of restaurant results
+- [x] Implement map view of restaurant results
 - [ ] Radius filter should expand as in the real Yelp app
 - [ ] Categories should show a subset of the full list with a "See All" row to expand
 
 ### Walk Throughs
-![](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView2.gif)
-![](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView.gif)
+![mapView](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/mapView.gif)
+![BusinessView1](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView2.gif)
+![BusinessView2](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView.gif)
