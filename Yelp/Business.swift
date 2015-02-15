@@ -109,31 +109,20 @@ class Business: NSObject, Printable, DebugPrintable {
         return 0.0
     }
     
-    func getMapLocation() -> MKCoordinateRegion {
-        var loc: MKCoordinateRegion?
+    func getCoordinates() -> CLLocationCoordinate2D {
+        var cloc: CLLocationCoordinate2D?
         
-        if let region = getBusinessDetail("region") as? NSDictionary {
-            var region_center: CLLocationCoordinate2D?
-            var region_span: MKCoordinateSpan?
-            
-            if let center = region["center"] as? NSDictionary {
-                let lat: Double = (center["latitude"] as NSString).doubleValue
-                let lnt: Double = (center["longitude"] as NSString).doubleValue
-                region_center = CLLocationCoordinate2D(latitude: lat, longitude: lnt)
+        if let loc = getBusinessDetail("location") as? NSDictionary {
+            if let region = loc["coordinate"] as? NSDictionary {
+                let lat = region["latitude"] as Double
+                let lnt = region["longitude"] as Double
+                cloc = CLLocationCoordinate2D(latitude: lat, longitude: lnt)
             }
-            
-            if let span = region["span"] as? NSDictionary {
-                let lat: Double = (span["latitude_delta"] as NSString).doubleValue
-                let lnt: Double = (span["longitude_delta"] as NSString).doubleValue
-                region_span = MKCoordinateSpanMake(lat, lnt)
-            }
-            
-            loc = MKCoordinateRegion(center: region_center!, span: region_span!)
         }
         
-        return loc!
+        return cloc!
     }
-    
+ 
     override var description: String {
         return dictionary.description
     }

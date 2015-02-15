@@ -146,9 +146,13 @@ class BusinessViewController: UIViewController,
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        println(segue.identifier)
         if segue.identifier == "FilterViewController" {
             let vc = segue.destinationViewController as FilterViewController
             vc.delegate = self
+        } else if segue.identifier == "MapViewController" {
+            let vc = segue.destinationViewController as MapViewController
+            vc.businesses = businesses
         }
     }
 }
