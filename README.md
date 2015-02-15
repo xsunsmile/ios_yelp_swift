@@ -1,3 +1,4 @@
+Hours to finish requirements: 14 hours
 
 ### Search results page
 - [x] Table rows should be dynamic height according to the content height
