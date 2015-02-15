@@ -12,6 +12,10 @@ Hours to finish requirements: 14 hours
 - [x] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
 
 ### Optionals
+- [ ] infinite scroll for restaurant results
+- [ ] Implement map view of restaurant results
+- [ ] Radius filter should expand as in the real Yelp app
+- [ ] Categories should show a subset of the full list with a "See All" row to expand
 
 ### Walk Throughs
 ![](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView2.gif)
