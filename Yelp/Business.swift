@@ -79,7 +79,7 @@ class Business: NSObject, Printable, DebugPrintable {
         return location
     }
     
-    func getGeoLocation() -> CLLocation {
+    func getGeoLocation() -> CLLocation? {
         var cloc: CLLocation?
         
         if let loc = getBusinessDetail("location") as? NSDictionary {
@@ -90,13 +90,17 @@ class Business: NSObject, Printable, DebugPrintable {
             }
         }
         
-        return cloc!
+        return cloc
     }
     
     func getDistance() -> Double {
         let zendeskLoc = CLLocation(latitude: 37.782193, longitude: -122.410254)
-        let distanceInMeters = zendeskLoc.distanceFromLocation(getGeoLocation())
-        return distanceInMeters / 1609.344;
+        
+        if let currentLocation = getGeoLocation() {
+            return zendeskLoc.distanceFromLocation(currentLocation) / 1609.344
+        }
+        
+        return 0.0
     }
     
     func getMapLocation() -> MKCoordinateRegion {

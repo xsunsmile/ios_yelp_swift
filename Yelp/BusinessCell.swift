@@ -29,7 +29,7 @@ class BusinessCell: UITableViewCell {
         reviewsLabel.text = NSString(format: "%d reviews", business!.getReviewCount())
         categoryLabel.text = business!.getCategories()
         addressLabel.text = business!.getLocation()
-       distanceLabel.text = NSString(format: "%.1f mi", business!.getDistance())
+        distanceLabel.text = NSString(format: "%.1f mi", business!.getDistance())
         businessIcon.setImageWithURL(business!.getImageUrl())
         ratingImageView.setImageWithURL(business!.getRatingImageUrl())
     }

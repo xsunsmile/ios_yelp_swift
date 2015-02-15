@@ -11,13 +11,14 @@ import UIKit
 class BusinessViewController: UIViewController,
                               UITableViewDelegate,
                               UITableViewDataSource,
-                              UISearchBarDelegate
+                              UISearchBarDelegate,
+                              FilterChangedDelegate
 {
     var client: YelpClient!
     
+    @IBOutlet weak var activityView: UIActivityIndicatorView!
     @IBOutlet weak var businessTableView: UITableView!
     
-    // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
     let yelpConsumerKey = "vxKwwcR_NMQ7WaEiQBK_CA"
     let yelpConsumerSecret = "33QCvh5bIF5jIHR5klQr7RtBDhQ"
     let yelpToken = "uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV"
@@ -26,6 +27,8 @@ class BusinessViewController: UIViewController,
     var businesses: [Business] = []
     var screenDirection = "portrait"
     var searchTerm = "Thai"
+    var currentLocation = "San Francisco"
+    var searchParams: NSMutableDictionary?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -34,7 +37,11 @@ class BusinessViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "rotated", name: UIDeviceOrientationDidChangeNotification, object: nil)
+        searchParams = [
+            "term": searchTerm,
+            "location": currentLocation,
+            "cll": "37.782193,-122.410254",
+        ]
         
         var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, 40))
         searchBar.delegate = self
@@ -49,29 +56,38 @@ class BusinessViewController: UIViewController,
         businessTableView.rowHeight = UITableViewAutomaticDimension
         businessTableView.estimatedRowHeight = 90
         
-        // Do any additional setup after loading the view, typically from a nib.
         client = YelpClient(consumerKey: yelpConsumerKey, consumerSecret: yelpConsumerSecret, accessToken: yelpToken, accessSecret: yelpTokenSecret)
-        
-        SVProgressHUD.show()
-        doSearch(searchTerm)
-        SVProgressHUD.dismiss()
+        doSearch()
     }
     
-    func doSearch(term: NSString) {
-        businesses.removeAll(keepCapacity: true)
+    func doSearch() {
+        activityView.hidden = false
+        businessTableView.hidden = true
         
-        client.searchWithTerm(term, success: {
-            (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
-            let businesses = response["businesses"]! as [NSDictionary]
-            for business in businesses {
-                self.businesses.append(Business(business: business as NSDictionary))
+        businesses.removeAll(keepCapacity: true)
+        if let sParams = searchParams {
+            client.searchWithParams(sParams, success: {
+                (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+                let businesses = response["businesses"]! as [NSDictionary]
+                for business in businesses {
+                    self.businesses.append(Business(business: business as NSDictionary))
+                }
+                
+                if let sortBy = sParams["sort"] as? Int {
+                    self.businesses.sort{
+                        $0.getDistance() < $1.getDistance()
+                    }
+                }
+                
+                self.businessTableView.reloadData()
+                
+                }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+                    println(error)
             }
-            
-            self.businessTableView.reloadData()
-            
-            }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
-                println(error)
         }
+        
+        activityView.hidden = true
+        businessTableView.hidden = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,41 +112,42 @@ class BusinessViewController: UIViewController,
         super.didReceiveMemoryWarning()
     }
     
-    func rotated() {
-        if(UIDeviceOrientationIsLandscape(UIDevice.currentDevice().orientation)) {
-            screenDirection = "landscape"
-        }
-        
-        if(UIDeviceOrientationIsPortrait(UIDevice.currentDevice().orientation)) {
-            screenDirection = "portrait"
-        }
-    }
-    
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             return
-        } else {
-            searchTerm = searchText
-            println(searchTerm)
         }
+        searchTerm = searchText
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        println("search \(searchTerm)")
         if !searchTerm.isEmpty {
             searchBar.endEditing(true)
             searchBar.text = ""
-            doSearch(searchTerm)
+            searchParams?.removeObjectForKey("sort")
+            searchParams?.removeObjectForKey("radius_filter")
+            searchParams?.removeObjectForKey("deals_filter")
+            searchParams?["term"] = searchTerm
+            doSearch()
         }
     }
     
-    /*
-    // MARK: - Navigation
-    
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    // Get the new view controller using segue.destinationViewController.
-    // Pass the selected object to the new view controller.
+    func distanceFilterChanged(distance: Double) {
+        searchParams?["radius_filter"] = distance
     }
-    */
+    
+    func offerDealFilterChanged(on: Bool) {
+        searchParams?["deals_filter"] = on
+    }
+    
+    func sortByFilterChanged(sortBy: Int) {
+        searchParams?["sort"] = sortBy
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        println(segue.identifier)
+        if segue.identifier == "FilterViewController" {
+            let vc = segue.destinationViewController as FilterViewController
+            vc.delegate = self
+        }
+    }
 }

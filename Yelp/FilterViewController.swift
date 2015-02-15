@@ -8,19 +8,22 @@
 
 import UIKit
 
+protocol FilterChangedDelegate: class {
+    func offerDealFilterChanged(on: Bool)
+    func distanceFilterChanged(distance: Double)
+    func sortByFilterChanged(sortBy: Int)
+    func doSearch()
+}
+    
 class FilterViewController: UITableViewController {
-
-    @IBOutlet weak var cancelButtonItem: UIBarButtonItem!
-    @IBOutlet weak var searchButtonItem: UIBarButtonItem!
+    weak var delegate: FilterChangedDelegate?
+    
+    let distanceOptions = [1, 3, 5, 10, 25]
+    let sortOptions = [0, 1, 2]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        
         navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         navigationController?.navigationBar.barTintColor = UIColor.redColor()
         navigationController?.navigationBar.barStyle = UIBarStyle.Black
@@ -30,69 +33,26 @@ class FilterViewController: UITableViewController {
         super.didReceiveMemoryWarning()
     }
 
-    // MARK: - Table view data source
-
     @IBAction func cancel(sender: UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+        navigationController?.popViewControllerAnimated(true)
     }
     
     @IBAction func search(sender: UIBarButtonItem) {
-        dismissViewControllerAnimated(true, completion: nil)
+        delegate?.doSearch()
+        navigationController?.popViewControllerAnimated(true)
     }
     
-    /*
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as UITableViewCell
-
-        // Configure the cell...
-
-        return cell
+    @IBAction func offerDealChanged(sender: UISwitch) {
+        delegate?.offerDealFilterChanged(sender.on)
     }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the specified item to be editable.
-        return true
+    
+    @IBAction func distanceSelected(sender: UISegmentedControl) {
+        let radius = distanceOptions[sender.selectedSegmentIndex]
+        delegate?.distanceFilterChanged(Double(radius) * 1609.34)
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    @IBAction func sortByChanged(sender: UISegmentedControl) {
+        var sortBy = sortOptions[sender.selectedSegmentIndex]
+        delegate?.sortByFilterChanged(sortBy)
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(tableView: UITableView, moveRowAtIndexPath fromIndexPath: NSIndexPath, toIndexPath: NSIndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return NO if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
