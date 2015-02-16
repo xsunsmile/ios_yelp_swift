@@ -1,4 +1,5 @@
 Hours to finish requirements: 14 hours
+Hours to finish optionals: 3 hours
 
 ### Search results page
 - [x] Table rows should be dynamic height according to the content height
@@ -12,7 +13,7 @@ Hours to finish requirements: 14 hours
 - [x] Clicking on the "Search" button should dismiss the filters page and trigger the search w/ the new filter settings.
 
 ### Optionals
-- [ ] infinite scroll for restaurant results
+- [x] infinite scroll for restaurant results
 - [x] Implement map view of restaurant results
 - [ ] Radius filter should expand as in the real Yelp app
 - [ ] Categories should show a subset of the full list with a "See All" row to expand
@@ -21,6 +22,8 @@ Hours to finish requirements: 14 hours
 
 - Map view
 ![mapView](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/mapView.gif)
+- Infinite scroll & pull to refresh
+![](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/infiniteScroll.gif)
 - Original layout
 ![BusinessView1](https://raw.githubusercontent.com/xsunsmile/ios_yelp_swift/master/businessView2.gif)
 - New layout
