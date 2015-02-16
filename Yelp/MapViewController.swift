@@ -14,11 +14,7 @@ class MapViewController: UIViewController,
 {
 
     @IBOutlet weak var mapView: MKMapView!
-    var businesses: [Business] = [] {
-        didSet {
-            placeBusinesses()
-        }
-    }
+    var businesses: [Business] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -38,8 +38,12 @@ class Business: NSObject, Printable, DebugPrintable {
         return NSURL(string: getBusinessDetail("snippet_image_url") as String)!
     }
     
-    func getImageUrl() -> NSURL {
-        return NSURL(string: getBusinessDetail("image_url") as String)!
+    func getImageUrl() -> NSURL? {
+        var imageUrl: NSURL?
+        if let url = getBusinessDetail("image_url") as? String {
+            imageUrl = NSURL(string: url)
+        }
+        return imageUrl
     }
     
     func getLargeUrl() -> NSURL? {

@@ -30,7 +30,9 @@ class BusinessCell: UITableViewCell {
         categoryLabel.text = business!.getCategories()
         addressLabel.text = business!.getLocation()
         distanceLabel.text = NSString(format: "%.1f mi", business!.getDistance())
-        businessIcon.setImageWithURL(business!.getImageUrl())
+        if let imageUrl = business!.getImageUrl() {
+            businessIcon.setImageWithURL(imageUrl)
+        }
         ratingImageView.setImageWithURL(business!.getRatingImageUrl())
     }
     

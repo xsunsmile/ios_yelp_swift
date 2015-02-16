@@ -24,11 +24,15 @@ class BusinessViewController: UIViewController,
     let yelpToken = "uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV"
     let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
     
+    var refreshControl: UIRefreshControl!
+    
     var businesses: [Business] = []
     var screenDirection = "portrait"
     var searchTerm = "Thai"
     var currentLocation = "San Francisco"
     var searchParams: NSMutableDictionary?
+    var offset = 0
+    var numberOfTotalResults = 0
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -36,10 +40,17 @@ class BusinessViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refersh")
+        refreshControl.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        businessTableView.addSubview(refreshControl)
+        
         searchParams = [
             "term": searchTerm,
             "location": currentLocation,
             "cll": "37.782193,-122.410254",
+            "offset": offset
         ]
         var searchBarHeight = navigationController?.navigationBar.frame.height
         var searchBar = UISearchBar(frame: CGRectMake(0, 0, view.frame.size.width * 0.8, searchBarHeight! * 0.6))
@@ -60,13 +71,15 @@ class BusinessViewController: UIViewController,
     }
     
     func doSearch() {
-        businesses.removeAll(keepCapacity: true)
         SVProgressHUD.show()
         
         if let sParams = searchParams {
             client.searchWithParams(sParams, success: {
                 (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
                 let businesses = response["businesses"]! as [NSDictionary]
+                self.numberOfTotalResults = response["total"] as NSInteger
+                
+                self.businesses.removeAll(keepCapacity: true)
                 for business in businesses {
                     self.businesses.append(Business(business: business as NSDictionary))
                 }
@@ -77,9 +90,9 @@ class BusinessViewController: UIViewController,
                     }
                 }
                 
+                println("reload table view")
                 self.businessTableView.reloadData()
                 SVProgressHUD.dismiss()
-                
                 }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
                     println(error)
                     SVProgressHUD.dismiss()
@@ -103,6 +116,28 @@ class BusinessViewController: UIViewController,
             cell.business = businesses[indexPath.row]
             return cell
         }
+    }
+    
+    //    Infinite scroll
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        println("will display index \(indexPath.row), total is \(numberOfTotalResults)")
+        if indexPath.row == businesses.count - 1 && offset < numberOfTotalResults - 20 {
+            offset += 20
+            searchParams?["offset"] = offset
+            businessTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: false)
+            doSearch()
+        }
+    }
+    
+    func refresh() {
+        println("should refresh")
+        offset -= 20
+        if offset < 0 {
+            offset = 0
+        }
+        searchParams?["offset"] = offset
+        refreshControl.endRefreshing()
+        doSearch()
     }
     
     override func didReceiveMemoryWarning() {
