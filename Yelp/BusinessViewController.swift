@@ -91,6 +91,7 @@ class BusinessViewController: UIViewController,
                 }
                 
                 println("reload table view")
+                self.businessTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: false)
                 self.businessTableView.reloadData()
                 SVProgressHUD.dismiss()
                 }) { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
@@ -124,7 +125,6 @@ class BusinessViewController: UIViewController,
         if indexPath.row == businesses.count - 1 && offset < numberOfTotalResults - 20 {
             offset += 20
             searchParams?["offset"] = offset
-            businessTableView.scrollRectToVisible(CGRectMake(0, 0, 1, 1), animated: false)
             doSearch()
         }
     }
